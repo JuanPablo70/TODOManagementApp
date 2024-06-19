@@ -14,7 +14,12 @@ export default function TodoApp() {
 function Login() {
 
     const [username, setUsername] = useState('todo');
+
     const [password, setPassword] = useState('');
+
+    const [successMessage, setSuccessMessage] = useState(false);
+
+    const [failedMessage, setFailedMessage] = useState(false);
 
     function handleUsernameChange(event) {
         setUsername(event.target.value);
@@ -24,8 +29,20 @@ function Login() {
         setPassword(event.target.value);
     }
 
+    function handleSubmit() {
+        if (username === 'todo' && password === 't0d0') {
+            setSuccessMessage(true);
+            setFailedMessage(false);
+        } else {
+            setSuccessMessage(false);
+            setFailedMessage(true);
+        }
+    }
+
     return (
         <div className="Login">
+            {successMessage && <div className="successMessage">Authentication successfull!</div>}
+            {failedMessage && <div className="errorMessage">Authentication failed. Plase check your credentials!</div>}
             <div className="LoginForm">
                 <div>
                     <label>Username: </label>
@@ -36,9 +53,11 @@ function Login() {
                     <input type="password" name="password" value={password} onChange={handlePasswordChange} />
                 </div>
                 <div>
-                    <button type="button" name="login">Login</button>
+                    <button type="button" name="login" onClick={handleSubmit}>Login</button>
                 </div>
             </div>
         </div>
     );
+
 }
+
