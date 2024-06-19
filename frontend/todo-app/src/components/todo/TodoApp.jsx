@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { BrowserRouter, Route, Routes, useNavigate } from 'react-router-dom';
+import { BrowserRouter, Route, Routes, useNavigate, useParams } from 'react-router-dom';
 import './TodoApp.css';
 
 export default function TodoApp() {
@@ -10,7 +10,8 @@ export default function TodoApp() {
                 <Routes>
                     <Route path='/' element={ <Login /> }></Route>
                     <Route path='/login' element={ <Login /> }></Route>
-                    <Route path='/welcome' element={ <Welcome /> }></Route>
+                    <Route path='/welcome/:username' element={ <Welcome /> }></Route>
+                    <Route path='*' element={ <Error /> }></Route>
                 </Routes>
             </BrowserRouter>
         </div>
@@ -20,7 +21,7 @@ export default function TodoApp() {
 
 function Login() {
 
-    const [username, setUsername] = useState('todo');
+    const [username, setUsername] = useState('admin');
 
     const [password, setPassword] = useState('');
 
@@ -39,10 +40,10 @@ function Login() {
     }
 
     function handleSubmit() {
-        if (username === 'todo' && password === 't0d0') {
+        if (username === 'admin' && password === 't0d0') {
             setSuccessMessage(true);
             setFailedMessage(false);
-            navigate('/welcome');
+            navigate(`/welcome/${username}`);
         } else {
             setSuccessMessage(false);
             setFailedMessage(true);
@@ -51,6 +52,7 @@ function Login() {
 
     return (
         <div className="Login">
+            <h1>Login</h1>
             {successMessage && <div className="successMessage">Authentication successfull!</div>}
             {failedMessage && <div className="errorMessage">Authentication failed. Plase check your credentials!</div>}
             <div className="LoginForm">
@@ -63,7 +65,7 @@ function Login() {
                     <input type="password" name="password" value={password} onChange={handlePasswordChange} />
                 </div>
                 <div>
-                    <button type="button" name="login" onClick={handleSubmit}>Login</button>
+                    <button type="button" name="login" onClick={handleSubmit}>Sign in</button>
                 </div>
             </div>
         </div>
@@ -73,9 +75,28 @@ function Login() {
 
 
 function Welcome() {
+
+    const params = useParams();
+
     return (
         <div className='Welcome'>
-            Welcome Component
+            <h1>Welcome {params.username}</h1>
+            <div>
+                Welcome Component
+            </div>
         </div>
     );
+
+}
+
+
+function Error() {
+
+    return (
+        <div className='Error'>
+            <h1>404 Path not found</h1>
+            <div>Please check the path.</div>
+        </div>
+    );
+
 }
