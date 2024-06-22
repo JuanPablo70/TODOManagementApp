@@ -8,10 +8,12 @@ export default function TodoApp() {
         <div className="TodoApp">
             <BrowserRouter>
                 <Routes>
-                    <Route path='/' element={ <Login /> }></Route>
-                    <Route path='/login' element={ <Login /> }></Route>
-                    <Route path='/welcome/:username' element={ <Welcome /> }></Route>
-                    <Route path='*' element={ <Error /> }></Route>
+                    <Route path='/' element={ <LoginComponent /> } />
+                    <Route path='/login' element={ <LoginComponent /> } />
+                    <Route path='/welcome/:username' element={ <WelcomeComponent /> } />
+                    <Route path='/todos' element={ <ListTodosComponent /> } />
+
+                    <Route path='*' element={ <ErrorComponent /> } />
                 </Routes>
             </BrowserRouter>
         </div>
@@ -19,7 +21,7 @@ export default function TodoApp() {
 }
 
 
-function Login() {
+function LoginComponent() {
 
     const [username, setUsername] = useState('admin');
 
@@ -51,7 +53,7 @@ function Login() {
     }
 
     return (
-        <div className="Login">
+        <div className="LoginComponent">
             <h1>Login</h1>
             {successMessage && <div className="successMessage">Authentication successfull!</div>}
             {failedMessage && <div className="errorMessage">Authentication failed. Plase check your credentials!</div>}
@@ -74,12 +76,12 @@ function Login() {
 }
 
 
-function Welcome() {
+function WelcomeComponent() {
 
     const params = useParams();
 
     return (
-        <div className='Welcome'>
+        <div className="WelcomeComponent">
             <h1>Welcome {params.username}</h1>
             <div>
                 Welcome Component
@@ -90,12 +92,50 @@ function Welcome() {
 }
 
 
-function Error() {
+function ErrorComponent() {
 
     return (
-        <div className='Error'>
+        <div className='ErrorComponent'>
             <h1>404 Path not found</h1>
             <div>Please check the path.</div>
+        </div>
+    );
+
+}
+
+function ListTodosComponent() {
+
+    const todos = [
+                    {id:1, description: 'Learn Angular'},
+                    {id:2, description: 'Learn Full stack dev'},
+                    {id:3, description: 'Learn MongoDB'}
+                ];
+
+    return (
+        <div className="ListTodosComponent">
+            <h1>What you want to do!</h1>
+            <div>
+                <table>
+                    <thead>
+                        <tr>
+                            <td>id</td>
+                            <td>description</td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {
+                            todos.map(
+                                todo => (
+                                    <tr key={todo.id}>
+                                        <td>{todo.id}</td>
+                                        <td>{todo.description}</td>
+                                    </tr>
+                                )
+                            )
+                        }
+                    </tbody>
+                </table>
+            </div>
         </div>
     );
 
