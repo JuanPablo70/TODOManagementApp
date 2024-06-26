@@ -7,6 +7,8 @@ export default function HeaderComponent() {
 
     const isAuthenticated = authContext.isAuthenticated;
 
+    const home = `/welcome/${authContext.username}`;
+
     function logout() {
         authContext.logout();
     }
@@ -19,7 +21,7 @@ export default function HeaderComponent() {
                     <div className="collapse navbar-collapse">
                         <ul className="navbar-nav">
                             <li className="nav-item fs-5">
-                                {isAuthenticated && <Link className="nav-link" to="/welcome/admin">Home</Link>}
+                                {isAuthenticated && <Link className="nav-link" to={home}>Home</Link>}
                             </li>
                             <li className="nav-item fs-5">
                                 {isAuthenticated && <Link className="nav-link" to="/todos">Todos</Link>}
