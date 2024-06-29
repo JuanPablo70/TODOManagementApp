@@ -2,6 +2,7 @@ package com.spring.rest.todoapi.security;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -14,7 +15,9 @@ public class BasicAuthenticationSecurityConfiguration {
     public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
         //Authenticate all requests
         httpSecurity.authorizeHttpRequests(
-                auth -> auth.anyRequest().authenticated()
+                auth -> auth
+                        .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll() //Enables preflight requests
+                        .anyRequest().authenticated()
         );
 
         //Basic authentication
@@ -27,7 +30,7 @@ public class BasicAuthenticationSecurityConfiguration {
 
         //Disabling csrf
         httpSecurity.csrf().disable();
-        
+
         return httpSecurity.build();
     }
 
