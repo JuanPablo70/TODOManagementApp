@@ -22,8 +22,8 @@ export default function LoginComponent() {
         setPassword(event.target.value);
     }
 
-    function handleSubmit() {
-        if (authContext.login(username, password)) {
+    async function handleSubmit() {
+        if (await authContext.login(username, password)) {
             navigate(`/welcome/${username}`);
         } else {
             setFailedMessage(true);
@@ -33,7 +33,7 @@ export default function LoginComponent() {
     return (
         <div className="LoginComponent">
             <h1>Login</h1>
-            {failedMessage && <div className="errorMessage">Authentication failed. Plase check your credentials!</div>}
+            {failedMessage && <div className="errorMessage">Authentication failed. Please check your credentials!</div>}
             <div className="LoginForm">
                 <div>
                     <label>Username: </label>

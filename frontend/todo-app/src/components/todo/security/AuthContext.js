@@ -1,5 +1,6 @@
 import { createContext, useContext, useState } from "react";
 import { basicAuthentication } from "../service/TodoApiService";
+import { apiClient } from "../service/ApiClient";
 
 export const AuthContext = createContext();
 
@@ -11,32 +12,52 @@ export default function AuthProvider({ children }) {
 
     const [username, setUsername] = useState(null);
 
-    // function login(username, password) {
-    //     if (username === 'admin' && password === 't0d0') {
-    //         setAuthenticated(true);
-    //         setUsername(username);
-    //         return true;
-    //     } else {
-    //         setAuthenticated(false);
-    //         return false;
-    //     }
-    // }
+    const [token, setToken] = useState(null);
 
-    function login(username, password) {
+    async function login(username, password) {
 
         const baToken = 'Basic ' + window.btoa(username + ":" + password);
 
-        basicAuthentication(baToken)
-            .then(response => console.log('response :>> ', response))
-            .catch(error => console.log('error :>> ', error))
+        try {
+            const response = await basicAuthentication(baToken);
+            let authorized;
+
+            if (response.status == 200) {
+                setAuthenticated(true);
+                setUsername(username);
+                setToken(baToken);
+
+                // Setting interceptor to add authorization token to any REST API request
+                apiClient.interceptors.request.use(
+                    (config) => {
+                        config.headers.Authorization = baToken;
+                        return config;
+                    }
+                );
+
+                authorized = true;
+            } else {
+                logout();
+                authorized = false;
+            }
+
+            return authorized;
+
+        } catch(error) {
+            logout();
+            return false;
+        }
+        
     }
 
     function logout() {
         setAuthenticated(false);
+        setUsername(null);
+        setToken(null);
     }
 
     return (
-        <AuthContext.Provider value={ {isAuthenticated, login, logout, username} }>
+        <AuthContext.Provider value={ {isAuthenticated, login, logout, username, token} }>
             {children}
         </AuthContext.Provider>
     );
