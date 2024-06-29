@@ -1,6 +1,6 @@
 import { createContext, useContext, useState } from "react";
-import { basicAuthentication } from "../service/TodoApiService";
 import { apiClient } from "../service/ApiClient";
+import { jwtAuthentication } from "../service/AuthenticationApiService";
 
 export const AuthContext = createContext();
 
@@ -16,21 +16,21 @@ export default function AuthProvider({ children }) {
 
     async function login(username, password) {
 
-        const baToken = 'Basic ' + window.btoa(username + ":" + password);
 
         try {
-            const response = await basicAuthentication(baToken);
+            const response = await jwtAuthentication(username, password);
             let authorized;
 
             if (response.status == 200) {
+                const jwtToken = 'Bearer ' + response.data.token;
                 setAuthenticated(true);
                 setUsername(username);
-                setToken(baToken);
+                setToken(jwtToken);
 
                 // Setting interceptor to add authorization token to any REST API request
                 apiClient.interceptors.request.use(
                     (config) => {
-                        config.headers.Authorization = baToken;
+                        config.headers.Authorization = jwtToken;
                         return config;
                     }
                 );
