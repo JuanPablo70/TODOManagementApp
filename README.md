@@ -19,6 +19,12 @@ To download this project, run the following command down below.
 git clone https://github.com/JuanPablo70/SocialMedia-REST-API.git
 ```
 
+With Docker Desktop installed, execute the following command down bellow.
+
+```
+docker run --detach --env MYSQL_ROOT_PASSWORD=t0d0s --env MYSQL_USER=todos-user --env MYSQL_PASSWORD=dummypassword --env MYSQL_DATABASE=todos-database --name mysql --publish 3306:3306 mysql:8-oracle
+```
+
 Open a terminal in the backend project directory and run the following command:
 
 ```
@@ -32,7 +38,7 @@ npm install
 npm start
 ```
 
-Use your prefered browser and go to localhost:3000 or localhost:3000/login.
+Use your preferred browser and go to localhost:3000 or localhost:3000/login.
 
 ### About this Project
 
